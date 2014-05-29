@@ -1,0 +1,248 @@
+
+<html>
+<head>
+	<title></title>
+	<script src="jquery.js"></script>
+	<script src="Chart.js"></script>
+</head>
+<body>
+<canvas id="month" height="450" width="600"></canvas>
+<canvas id="day" height="450" width="600"></canvas>
+<canvas id="dayMonth" height="450" width="600"></canvas>
+<canvas id="id" height="450" width="600"></canvas>
+<canvas id="daysBetween" height="450" width="600"></canvas>
+<div id="results">
+	
+</div>
+<script type="text/javascript">
+			//Pruebas
+			/*month(2014,4);
+			day(2);
+			dayMonth(2014,2,3);*7
+			/*
+			1
+			5
+			6
+			*//*
+			var  hora = "2014-04-02T00:00:00.000Z";
+			var parstArray = hora.split("T");
+			
+			
+			var date = parstArray[0];
+			
+			parstArray = date.split("-");
+			date = parstArray[2]+" "+parstArray[1];
+			console.log(date);*/
+			id(2);
+
+function month(year,day){	
+	var apiURL = "http://mighty-gorge-2413.herokuapp.com/sensor_data/year/"+year+"/month/"+day
+	console.log(apiURL);
+			var sensorOne = new Array();
+			var sensorTwo = new Array();
+			var sensorThree = new Array();
+			var days = new Array();
+			var indexDay = 1;
+			$.getJSON( "month.json", function(data) {
+				$.each(data.sensordata.days, function(index, val) {
+					sensorOne[index] = parseFloat(val.sensorValues[0]/4.8);
+					sensorTwo[index] = parseFloat(val.sensorValues[1]/4.8);
+					sensorThree[index] = parseFloat(val.sensorValues[2]/4.8);
+					days[index] = indexDay.toString();
+					indexDay++;
+
+				});
+			})
+			  .done(function() { 
+				var data = {
+				labels : days,
+				datasets : [
+					{
+						fillColor : "rgba(45,62,80,0.5)",
+						strokeColor : "rgba(220,220,220,1)",
+						pointColor : "rgba(220,220,220,1)",
+						pointStrokeColor : "#fff",
+						data : sensorOne
+					},
+					{
+						fillColor : "rgba(27,188,55,0.5)",
+						strokeColor : "rgba(151,187,205,1)",
+						pointColor : "rgba(151,187,205,1)",
+						pointStrokeColor : "#fff",
+						data : sensorTwo
+					},
+					{
+						fillColor : "rgba(217,112,65,0.5)",
+						strokeColor : "rgba(151,187,205,1)",
+						pointColor : "rgba(151,187,155,1)",
+						pointStrokeColor : "#fff",
+						data : sensorThree
+					}
+				]
+			}
+			var myLine = new Chart(document.getElementById("month").getContext("2d")).Line(data);	
+
+
+			  })
+			  .fail(function() {
+
+			  })
+			  .always(function() {
+
+			  });
+}
+function day(day){	
+	var apiURL = "http://mighty-gorge-2413.herokuapp.com/sensor_data/day/"+day
+	console.log(apiURL);
+			var sensorOne = new Array();
+			var sensorTwo = new Array();
+			var sensorThree = new Array();
+			var hour = new Array();
+			$.getJSON( "day.json", function(data) {
+				$.each(data.sensordata.hours, function(index, val) {
+					sensorOne[index] = parseFloat(val.sensorValues[0]/4.8);
+					sensorTwo[index] = parseFloat(val.sensorValues[1]/4.8);
+					sensorThree[index] = parseFloat(val.sensorValues[2]/4.8);
+					hour[index] = index.toString();
+				});
+			})
+			  .done(function() { 
+				var data = {
+				labels : hour,
+				datasets : [
+					{
+						fillColor : "rgba(45,62,80,0.5)",
+						strokeColor : "rgba(220,220,220,1)",
+						pointColor : "rgba(220,220,220,1)",
+						pointStrokeColor : "#fff",
+						data : sensorOne
+					},
+					{
+						fillColor : "rgba(27,188,55,0.5)",
+						strokeColor : "rgba(151,187,205,1)",
+						pointColor : "rgba(151,187,205,1)",
+						pointStrokeColor : "#fff",
+						data : sensorTwo
+					},
+					{
+						fillColor : "rgba(217,112,65,0.5)",
+						strokeColor : "rgba(151,187,205,1)",
+						pointColor : "rgba(151,187,155,1)",
+						pointStrokeColor : "#fff",
+						data : sensorThree
+					}
+				]
+			}
+			var myLine = new Chart(document.getElementById("day").getContext("2d")).Line(data);	
+
+
+			  })
+			  .fail(function() {
+
+			  })
+			  .always(function() {
+
+			  });
+}
+
+
+
+
+function dayMonth(year,month,day){	
+	var apiURL = "http://mighty-gorge-2413.herokuapp.com/sensor_data/year/"+year+"/month/"+month+"/day/"+day
+	console.log(apiURL);
+			var sensorOne = new Array();
+			var sensorTwo = new Array();
+			var sensorThree = new Array();
+			var hour = new Array();
+			$.getJSON( "dayMonth.json", function(data) {
+				$.each(data.sensordata.hours, function(index, val) {
+					sensorOne[index] = parseFloat(val.sensorValues[0]/4.8);
+					sensorTwo[index] = parseFloat(val.sensorValues[1]/4.8);
+					sensorThree[index] = parseFloat(val.sensorValues[2]/4.8);
+					hour[index] = index.toString();
+				});
+			})
+			  .done(function() { 
+				var data = {
+				labels : hour,
+				datasets : [
+					{
+						fillColor : "rgba(45,62,80,0.5)",
+						strokeColor : "rgba(220,220,220,1)",
+						pointColor : "rgba(220,220,220,1)",
+						pointStrokeColor : "#fff",
+						data : sensorOne
+					},
+					{
+						fillColor : "rgba(27,188,55,0.5)",
+						strokeColor : "rgba(151,187,205,1)",
+						pointColor : "rgba(151,187,205,1)",
+						pointStrokeColor : "#fff",
+						data : sensorTwo
+					},
+					{
+						fillColor : "rgba(217,112,65,0.5)",
+						strokeColor : "rgba(151,187,205,1)",
+						pointColor : "rgba(151,187,155,1)",
+						pointStrokeColor : "#fff",
+						data : sensorThree
+					}
+				]
+			}
+			var myLine = new Chart(document.getElementById("dayMonth").getContext("2d")).Line(data);	
+
+
+			  })
+			  .fail(function() {
+
+			  })
+			  .always(function() {
+
+			  });
+}
+
+
+function id(id)
+{
+	var apiURL = "http://mighty-gorge-2413.herokuapp.com/sensor_data/"+id;
+	console.log(apiURL);
+			var sensorOne;
+			var sensorTwo;
+			var sensorThree;;
+			$.getJSON( "id.json", function(data) {
+					sensorOne = parseFloat(data.sensorValues[0]/4.8);
+					console.log(sensorOne);
+					sensorTwo = parseFloat(data.sensorValues[1]/4.8);
+					sensorThree = parseFloat(data.sensorValues[2]/4.8);
+			})
+			  .done(function() { 
+				var data = [
+					{
+						value: sensorOne,
+						color:"#F38630"
+					},
+					{
+						value : sensorTwo,
+						color : "#E0E4CC"
+					},
+					{
+						value : sensorThree,
+						color : "#69D2E7"
+					}	
+							
+							
+				]
+				new Chart(document.getElementById("id").getContext("2d")).Pie(data);
+
+			  })
+			  .fail(function() {
+
+			  })
+			  .always(function() {
+
+			  });	
+}
+</script>
+</body>
+</html>
