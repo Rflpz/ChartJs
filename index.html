@@ -20,7 +20,8 @@
 			day(2);
 			dayMonth(2014,2,3);
 			id(2)
-			dateBetween(2014,01,2,1,23,43,2014,1,4,1,23,43);
+			dateBetween(2014,01,1,1,23,43,2014,1,2,1,23,43);
+			hourBetween(3,4);
 
 function month(year,day){	
 	var apiURL = "http://mighty-gorge-2413.herokuapp.com/sensor_data/year/"+year+"/month/"+day
@@ -131,10 +132,6 @@ function day(day){
 
 			  });
 }
-
-
-
-
 function dayMonth(year,month,day){	
 	var apiURL = "http://mighty-gorge-2413.herokuapp.com/sensor_data/year/"+year+"/month/"+month+"/day/"+day
 	console.log(apiURL);
@@ -188,8 +185,6 @@ function dayMonth(year,month,day){
 
 			  });
 }
-
-
 function id(id)
 {
 	var apiURL = "http://mighty-gorge-2413.herokuapp.com/sensor_data/"+id;
@@ -258,6 +253,71 @@ function dateBetween(year,month,day,hour,minute,second,_year,_month,_day,_hour,_
 			  .done(function() { 
 				var data = {
 				labels : date,
+				datasets : [
+					{
+						fillColor : "rgba(45,62,80,0.5)",
+						strokeColor : "rgba(220,220,220,1)",
+						pointColor : "rgba(220,220,220,1)",
+						pointStrokeColor : "#fff",
+						data : sensorOne
+					},
+					{
+						fillColor : "rgba(27,188,55,0.5)",
+						strokeColor : "rgba(151,187,205,1)",
+						pointColor : "rgba(151,187,205,1)",
+						pointStrokeColor : "#fff",
+						data : sensorTwo
+					},
+					{
+						fillColor : "rgba(217,112,65,0.5)",
+						strokeColor : "rgba(151,187,205,1)",
+						pointColor : "rgba(151,187,155,1)",
+						pointStrokeColor : "#fff",
+						data : sensorThree
+					}
+				]
+			}
+			var myLine = new Chart(document.getElementById("dateBetween").getContext("2d")).Line(data);	
+
+
+			  })
+			  .fail(function() {
+
+			  })
+			  .always(function() {
+
+			  });
+}
+function hourBetween(hour,_hour){	
+	var apiURL = "http://mighty-gorge-2413.herokuapp.com/sensor_data/from_hour/"+hour.toString()+"/to_hour/"+_hour.toString();
+	console.log(apiURL);
+			var sensorOne = new Array();
+			var sensorTwo = new Array();
+			var sensorThree = new Array();
+			var hour = new Array();
+			var pointerTemporal = 0;
+			var lastSaved;
+			var temporalDate;
+			$.getJSON( "dateBetween.json", function(data) {
+				$.each(data.sensordata, function(index, val) {
+					sensorOne[index] = parseFloat(val.sensorValues[0]/4.8);
+					sensorTwo[index] = parseFloat(val.sensorValues[1]/4.8);
+					sensorThree[index] = parseFloat(val.sensorValues[2]/4.8);
+					var termporalHour = (val.date).toString();
+					termporalHour = termporalHour.split("T");
+					var tempHour = termporalHour[1];
+					tempHour = tempHour.split(":");
+					if(tempHour[0] != lastSaved)
+					{
+						hour[pointerTemporal] = tempHour[0].toString();
+						lastSaved = tempHour[0].toString();
+						pointerTemporal++;
+					}
+				});
+			})
+			  .done(function() { 
+				var data = {
+				labels : hour,
 				datasets : [
 					{
 						fillColor : "rgba(45,62,80,0.5)",
