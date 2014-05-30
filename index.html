@@ -22,7 +22,7 @@
 			dayMonth(2014,2,3);
 			id(2)
 			dateBetween(2014,01,1,1,23,43,2014,1,2,1,23,43);
-			hourBetween(3,4);
+			hourBetween(2,5);
 
 function month(year,day){	
 	var apiURL = "http://mighty-gorge-2413.herokuapp.com/sensor_data/year/"+year+"/month/"+day
@@ -299,7 +299,7 @@ function hourBetween(hour,_hour){
 			var pointerTemporal = 0;
 			var lastSaved;
 			var temporalDate;
-			$.getJSON( "dateBetween.json", function(data) {
+			$.getJSON( "hourBetween.json", function(data) {
 				$.each(data.sensordata, function(index, val) {
 					sensorOne[index] = parseFloat(val.sensorValues[0]/4.8);
 					sensorTwo[index] = parseFloat(val.sensorValues[1]/4.8);
