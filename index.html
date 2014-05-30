@@ -11,6 +11,7 @@
 <canvas id="dayMonth" height="450" width="600"></canvas>
 <canvas id="id" height="450" width="600"></canvas>
 <canvas id="dateBetween" height="450" width="600"></canvas>
+<canvas id="hourBetween" height="450" width="600"></canvas>
 <div id="results">
 	
 </div>
@@ -342,7 +343,7 @@ function hourBetween(hour,_hour){
 					}
 				]
 			}
-			var myLine = new Chart(document.getElementById("dateBetween").getContext("2d")).Line(data);	
+			var myLine = new Chart(document.getElementById("hourBetween").getContext("2d")).Line(data);	
 
 
 			  })
