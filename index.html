@@ -10,27 +10,17 @@
 <canvas id="day" height="450" width="600"></canvas>
 <canvas id="dayMonth" height="450" width="600"></canvas>
 <canvas id="id" height="450" width="600"></canvas>
-<canvas id="hourBetween" height="450" width="600"></canvas>
+<canvas id="dateBetween" height="450" width="600"></canvas>
 <div id="results">
 	
 </div>
 <script type="text/javascript">
 			//Pruebas
-			/*month(2014,4);
+			month(2014,4);
 			day(2);
 			dayMonth(2014,2,3);
-			id(2);*/
-
-			var  hora = "2014-04-02T00:00:00.000Z";
-			var parstArray = hora.split("T");
-			
-			//T00:00:00.000Z
-			var date = parstArray[1];
-			
-			parstArray = date.split(":");
-			date = parstArray[1]+" "+parstArray[2]+" "+parstArray[3];
-			console.log(date);
-			
+			id(2)
+			dateBetween(2014,01,2,1,23,43,2014,1,4,1,23,43);
 
 function month(year,day){	
 	var apiURL = "http://mighty-gorge-2413.herokuapp.com/sensor_data/year/"+year+"/month/"+day
@@ -239,25 +229,35 @@ function id(id)
 
 			  });	
 }
-
-function hoursBetween(from_hour,to_hour){	
-	var apiURL = "http://mighty-gorge-2413.herokuapp.com/sensor_data /sensor_data/from_hour/"+from_hour+"/to_hour/"+to_hour;
+function dateBetween(year,month,day,hour,minute,second,_year,_month,_day,_hour,_minute,_second){	
+	var fromDate = year.toString()+"-"+month.toString()+"-"+day.toString()+"-"+hour.toString()+"-"+minute.toString()+"-"+second.toString();
+	var toDate = _year.toString()+"-"+_month.toString()+"-"+_day.toString()+"-"+_hour.toString()+"-"+_minute.toString()+"-"+_second.toString();
+	var apiURL = "http://mighty-gorge-2413.herokuapp.com/sensor_data/from_date/"+fromDate+"/to_date/"+toDate;
 	console.log(apiURL);
 			var sensorOne = new Array();
 			var sensorTwo = new Array();
 			var sensorThree = new Array();
-			var hour = new Array();
-			$.getJSON( "hourBetween.json", function(data) {
-				$.each(data.sensordata.hours, function(index, val) {
+			var date = new Array();
+			var pointerTemporal = 0;
+			var lastSaved;
+			$.getJSON( "dateBetween.json", function(data) {
+				$.each(data.sensordata, function(index, val) {
 					sensorOne[index] = parseFloat(val.sensorValues[0]/4.8);
 					sensorTwo[index] = parseFloat(val.sensorValues[1]/4.8);
 					sensorThree[index] = parseFloat(val.sensorValues[2]/4.8);
-					hour[index] = index.toString();
+					var temporalDate = (val.date).toString();
+					temporalDate = temporalDate.split("T");
+					if(temporalDate[0] != lastSaved)
+					{
+						date[pointerTemporal] = temporalDate[0].toString();
+						lastSaved = temporalDate[0].toString();
+						pointerTemporal++;
+					}
 				});
 			})
 			  .done(function() { 
 				var data = {
-				labels : hour,
+				labels : date,
 				datasets : [
 					{
 						fillColor : "rgba(45,62,80,0.5)",
@@ -282,7 +282,7 @@ function hoursBetween(from_hour,to_hour){
 					}
 				]
 			}
-			var myLine = new Chart(document.getElementById("dayMonth").getContext("2d")).Line(data);	
+			var myLine = new Chart(document.getElementById("dateBetween").getContext("2d")).Line(data);	
 
 
 			  })
@@ -293,6 +293,7 @@ function hoursBetween(from_hour,to_hour){
 
 			  });
 }
+
 </script>
 </body>
 </html>
